@@ -50,6 +50,8 @@ This repository includes a `CNAME` file for:
 www.appel.co.uk
 ```
 
+In the GitHub repository, go to **Settings** > **Pages** > **Custom domain**, enter `www.appel.co.uk`, and save.
+
 In the DNS settings for `appel.co.uk`, add or update the `www` record:
 
 ```text
@@ -64,4 +66,4 @@ After the DNS change has propagated, GitHub Pages should serve this site at:
 https://www.appel.co.uk
 ```
 
-In GitHub, you can also confirm this under **Settings** > **Pages** > **Custom domain**.
+Once GitHub has issued the certificate, enable **Enforce HTTPS** in **Settings** > **Pages**.
