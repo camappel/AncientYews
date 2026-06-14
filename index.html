@@ -59,6 +59,93 @@
         line-height: 1.6;
       }
 
+      .site-context {
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+        gap: 28px;
+        align-items: start;
+        margin-bottom: 52px;
+      }
+
+      .site-context.single-column {
+        grid-template-columns: 1fr;
+      }
+
+      .text-block {
+        max-width: 760px;
+      }
+
+      .text-block h2 {
+        margin: 0 0 16px;
+        color: #253027;
+        font-size: clamp(1.5rem, 3vw, 2.35rem);
+        line-height: 1.1;
+      }
+
+      .text-block p {
+        margin: 0 0 16px;
+        color: #3c463f;
+        font-size: 1.02rem;
+        line-height: 1.65;
+      }
+
+      .text-block p:last-child {
+        margin-bottom: 0;
+      }
+
+      .source {
+        font-size: 0.95rem;
+      }
+
+      a {
+        color: #395f42;
+        text-decoration-color: rgba(57, 95, 66, 0.38);
+        text-underline-offset: 3px;
+      }
+
+      a:hover {
+        color: #243f2b;
+        text-decoration-color: currentColor;
+      }
+
+      .metadata-card {
+        margin: 0;
+        padding: 22px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(31, 37, 32, 0.12);
+        border-radius: 8px;
+        box-shadow: 0 18px 50px rgba(20, 29, 22, 0.08);
+      }
+
+      .metadata-card div {
+        display: grid;
+        gap: 6px;
+        padding: 0 0 16px;
+        margin: 0 0 16px;
+        border-bottom: 1px solid rgba(31, 37, 32, 0.1);
+      }
+
+      .metadata-card div:last-child {
+        padding-bottom: 0;
+        margin-bottom: 0;
+        border-bottom: 0;
+      }
+
+      .metadata-card dt {
+        color: #69746c;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0;
+        text-transform: uppercase;
+      }
+
+      .metadata-card dd {
+        margin: 0;
+        color: #243027;
+        font-size: 1rem;
+        line-height: 1.45;
+      }
+
       .scan-list {
         display: grid;
         gap: 36px;
@@ -105,6 +192,16 @@
           gap: 28px;
         }
 
+        .site-context {
+          grid-template-columns: 1fr;
+          gap: 22px;
+          margin-bottom: 40px;
+        }
+
+        .metadata-card {
+          padding: 18px;
+        }
+
         model-viewer {
           height: 70vh;
           min-height: 360px;
@@ -122,6 +219,65 @@
           from Luma AI scans.
         </p>
       </header>
+
+      <section class="site-context" aria-label="Site metadata">
+        <div class="text-block">
+          <h2>Newlands Corner yew grove</h2>
+          <p>
+            Newlands Corner is not just a scenic woodland site. The Ancient Yew
+            Group records its First Grove as a public woodland site near
+            Guildford, with 8 ancient yews in the 5-7m girth class, 12 ancient
+            yews in the 4-5m girth class, and 4 notable yews below 4m girth.
+          </p>
+          <p>
+            This makes the site an unusually dense cluster of ancient and
+            veteran yews, and a strong candidate for repeat 3D documentation.
+          </p>
+          <p class="source">
+            Source:
+            <a href="https://www.ancient-yew.org/yew_tree_database/newlands-corner-1st-grove/">
+              Ancient Yew Group &mdash; Newlands Corner, 1st Grove
+            </a>
+          </p>
+        </div>
+
+        <dl class="metadata-card">
+          <div>
+            <dt>Location</dt>
+            <dd>Newlands Corner, near Guildford, Surrey</dd>
+          </div>
+          <div>
+            <dt>Grid reference</dt>
+            <dd>TQ040495</dd>
+          </div>
+          <div>
+            <dt>Site type</dt>
+            <dd>Public woodland</dd>
+          </div>
+          <div>
+            <dt>Recorded yew population</dt>
+            <dd>
+              8 ancient yews at 5-7m girth; 12 ancient yews at 4-5m girth; 4
+              notable yews below 4m
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="site-context single-column" aria-label="Why yews matter">
+        <div class="text-block">
+          <h2>Why yews?</h2>
+          <p>
+            Yew is one of Europe's longest-lived native tree species. Ancient
+            yews often develop hollow trunks, complex branching structures, and
+            irregular growth forms that make simple age estimation difficult.
+            That is exactly why 3D reconstruction is interesting: instead of
+            relying only on a single girth measurement, repeat scans could
+            capture structure, crown form, hollowing, storm damage, and change
+            over time.
+          </p>
+        </div>
+      </section>
 
       <section class="scan-list" aria-label="3D scan viewers">
         <article class="scan">
