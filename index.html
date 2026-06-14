@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ancient Yew Digital Twin</title>
-  <meta name="description" content="A prototype 3D digital twin of an ancient yew tree in Surrey.">
+  <title>Ancient Tree Digital Twins</title>
+  <meta name="description" content="Prototype 3D and video documentation of ancient trees.">
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <style>
     :root {
@@ -92,6 +92,14 @@
       font-size: 0.95rem;
     }
 
+    .eyebrow {
+      color: #69746c;
+      font-size: 0.86rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
     a {
       color: #395f42;
       text-decoration-color: rgba(57, 95, 66, 0.38);
@@ -146,6 +154,13 @@
       gap: 36px;
     }
 
+    .section-heading {
+      margin: 0 0 20px;
+      color: #253027;
+      font-size: clamp(1.5rem, 3vw, 2.35rem);
+      line-height: 1.1;
+    }
+
     .scan {
       display: grid;
       gap: 14px;
@@ -156,6 +171,23 @@
       color: #253027;
       font-size: clamp(1.35rem, 2.5vw, 2rem);
       line-height: 1.15;
+    }
+
+    .video-frame {
+      margin: 0;
+      width: 100%;
+    }
+
+    video {
+      display: block;
+      width: 100%;
+      max-height: 760px;
+      aspect-ratio: 9 / 16;
+      object-fit: contain;
+      background: #171c18;
+      border: 1px solid rgba(31, 37, 32, 0.12);
+      border-radius: 8px;
+      box-shadow: 0 24px 70px rgba(20, 29, 22, 0.12);
     }
 
     model-viewer {
@@ -209,14 +241,37 @@
 <body>
   <main>
     <header>
-      <h1>Ancient Yew Digital Twin</h1>
+      <h1>Ancient Tree Digital Twins</h1>
       <p class="intro">
-        A prototype 3D digital twin of an ancient yew tree in Surrey.
+        A small prototype collection of 3D and video captures of ancient
+        trees, exploring how scan outputs can document form, texture, and
+        change over time.
       </p>
     </header>
 
+    <section class="site-context" aria-label="Bristlecone pine reveal">
+      <div class="text-block">
+        <p class="eyebrow">Video capture</p>
+        <h2>Bristlecone pine reveal</h2>
+        <p>
+          A short reveal sequence for a bristlecone pine scan experiment. This
+          version uses the cleaner video output rather than the rougher test
+          model, keeping the section focused on the shape and presence of the
+          tree.
+        </p>
+      </div>
+
+      <figure class="video-frame">
+        <video controls muted playsinline loop preload="metadata">
+          <source src="assets/bristlecone_magic_reveal.mp4" type="video/mp4">
+          Your browser does not support this video.
+        </video>
+      </figure>
+    </section>
+
     <section class="site-context" aria-label="Site metadata">
       <div class="text-block">
+        <p class="eyebrow">3D scan study</p>
         <h2>Newlands Corner yew grove</h2>
         <p>
           Newlands Corner is not just a scenic woodland site. The Ancient Yew
@@ -259,22 +314,21 @@
       </dl>
     </section>
 
-    <section class="site-context single-column" aria-label="Why yews matter">
+    <section class="site-context single-column" aria-label="Why ancient trees matter">
       <div class="text-block">
-        <h2>Why yews?</h2>
+        <h2>Why ancient trees?</h2>
         <p>
-          Yew is one of Europe's longest-lived native tree species. Ancient
-          yews often develop hollow trunks, complex branching structures, and
-          irregular growth forms that make simple age estimation difficult.
-          That is exactly why 3D reconstruction is interesting: instead of
-          relying only on a single girth measurement, repeat scans could
-          capture structure, crown form, hollowing, storm damage, and change
-          over time.
+          Ancient trees often develop hollow trunks, complex branching
+          structures, weathered surfaces, and irregular growth forms that are
+          hard to capture with a single measurement. That is what makes 3D
+          reconstruction interesting: repeat scans could record structure,
+          crown form, hollowing, storm damage, texture, and change over time.
         </p>
       </div>
     </section>
 
     <section class="scan-list" aria-label="3D scan viewers">
+      <h2 class="section-heading">Newlands Corner yew scans</h2>
       <article class="scan">
         <h2>Ground Scan</h2>
         <model-viewer src="assets/yew_1.glb" alt="Ground-level 3D scan of an ancient yew tree" camera-controls
