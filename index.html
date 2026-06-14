@@ -7,6 +7,14 @@
   <title>Ancient Tree Digital Twins</title>
   <meta name="description" content="Prototype 3D and video documentation of ancient trees.">
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.165.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.165.0/examples/jsm/"
+      }
+    }
+  </script>
   <style>
     :root {
       color: #1f2520;
@@ -195,6 +203,74 @@
       box-shadow: 0 24px 70px rgba(20, 29, 22, 0.12);
     }
 
+    .point-cloud-viewer {
+      display: grid;
+      gap: 14px;
+    }
+
+    .point-cloud-stage {
+      position: relative;
+      width: 100%;
+      height: clamp(420px, 68vh, 760px);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.09), transparent 40%),
+        #141915;
+      border: 1px solid rgba(31, 37, 32, 0.12);
+      border-radius: 8px;
+      box-shadow: 0 24px 70px rgba(20, 29, 22, 0.12);
+    }
+
+    .point-cloud-stage canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .point-cloud-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .point-cloud-tabs {
+      display: inline-flex;
+      gap: 4px;
+      padding: 4px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(31, 37, 32, 0.12);
+      border-radius: 8px;
+    }
+
+    .point-cloud-tabs button {
+      min-height: 36px;
+      padding: 0 14px;
+      color: #344039;
+      background: transparent;
+      border: 0;
+      border-radius: 6px;
+      font: inherit;
+      font-size: 0.94rem;
+      cursor: pointer;
+    }
+
+    .point-cloud-tabs button[aria-pressed="true"] {
+      color: #f6f7f2;
+      background: #26332a;
+    }
+
+    .point-cloud-tabs button:disabled {
+      cursor: default;
+    }
+
+    .point-cloud-status {
+      min-height: 1.5em;
+      color: #5d685f;
+      font-size: 0.94rem;
+    }
+
     model-viewer {
       display: block;
       width: 100%;
@@ -236,6 +312,12 @@
       }
 
       model-viewer {
+        height: 70vh;
+        min-height: 360px;
+        max-height: 580px;
+      }
+
+      .point-cloud-stage {
         height: 70vh;
         min-height: 360px;
         max-height: 580px;
@@ -318,8 +400,37 @@
       </div>
     </section>
 
+    <section class="scan-list" aria-label="Point cloud reconstruction">
+      <div class="text-block">
+        <p class="eyebrow">Raw scan geometry</p>
+        <h2 class="section-heading">Point Cloud Reconstruction</h2>
+        <p>
+          These point clouds show the scan data before it becomes a polished
+          surface model: millions of colored measurements suspended in space,
+          preserving the grove as texture, gaps, shadow, bark, and canopy.
+        </p>
+      </div>
+
+      <div class="point-cloud-viewer">
+        <div class="point-cloud-toolbar">
+          <div class="point-cloud-tabs" aria-label="Point cloud scans">
+            <button type="button" data-cloud-src="assets/yew_1.ply" data-cloud-name="Ground Scan" aria-pressed="true">
+              Ground Scan
+            </button>
+            <button type="button" data-cloud-src="assets/yew_2.ply" data-cloud-name="Second Scan" aria-pressed="false">
+              Second Scan
+            </button>
+          </div>
+          <div class="point-cloud-status" id="point-cloud-status" role="status">
+            Loading Ground Scan point cloud...
+          </div>
+        </div>
+
+        <div class="point-cloud-stage" id="point-cloud-stage"></div>
+      </div>
+    </section>
+
     <section class="scan-list" aria-label="3D scan viewers">
-      <h2 class="section-heading">Newlands Corner yew scans</h2>
       <article class="scan">
         <h2>Ground Scan</h2>
         <model-viewer src="assets/yew_1.glb" alt="Ground-level 3D scan of an ancient yew tree" camera-controls
@@ -338,7 +449,6 @@
     <section class="site-context" aria-label="Bristlecone pine metadata">
       <div class="text-block">
         <p class="eyebrow">Video capture study</p>
-        <h2>Bristlecone pine reveal</h2>
         <p>
           This bristlecone pine was captured near Mount Princeton in Colorado.
           In this part of the Rockies, bristlecones are Rocky Mountain
@@ -409,6 +519,151 @@
       </figure>
     </section>
   </main>
+
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+    import { PLYLoader } from "three/addons/loaders/PLYLoader.js";
+
+    const stage = document.querySelector("#point-cloud-stage");
+    const status = document.querySelector("#point-cloud-status");
+    const buttons = [...document.querySelectorAll("[data-cloud-src]")];
+
+    if (stage && status && buttons.length) {
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x141915);
+
+      const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 10000);
+      let renderer;
+
+      try {
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+      } catch {
+        status.textContent = "Point cloud viewer needs WebGL";
+        throw new Error("WebGL is unavailable");
+      }
+
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8));
+      stage.appendChild(renderer.domElement);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.08;
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 0.45;
+
+      const loader = new PLYLoader();
+      let activePoints = null;
+      let activeRequest = 0;
+
+      const resize = () => {
+        const { width, height } = stage.getBoundingClientRect();
+        renderer.setSize(width, height, false);
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+      };
+
+      const framePointCloud = (geometry) => {
+        geometry.computeBoundingBox();
+        const box = geometry.boundingBox;
+        const size = new THREE.Vector3();
+        box.getSize(size);
+        const maxDimension = Math.max(size.x, size.y, size.z) || 1;
+
+        geometry.center();
+        geometry.computeBoundingSphere();
+
+        camera.near = maxDimension / 1000;
+        camera.far = maxDimension * 12;
+        camera.position.set(maxDimension * 0.75, maxDimension * 0.42, maxDimension * 1.6);
+        camera.updateProjectionMatrix();
+
+        controls.target.set(0, 0, 0);
+        controls.minDistance = maxDimension * 0.12;
+        controls.maxDistance = maxDimension * 5;
+        controls.update();
+
+        return Math.max(maxDimension / 520, 0.006);
+      };
+
+      const disposeActivePoints = () => {
+        if (!activePoints) {
+          return;
+        }
+
+        scene.remove(activePoints);
+        activePoints.geometry.dispose();
+        activePoints.material.dispose();
+        activePoints = null;
+      };
+
+      const setActiveButton = (selectedButton) => {
+        buttons.forEach((button) => {
+          button.setAttribute("aria-pressed", button === selectedButton ? "true" : "false");
+          button.disabled = button === selectedButton;
+        });
+      };
+
+      const loadCloud = (button) => {
+        const requestId = ++activeRequest;
+        const cloudName = button.dataset.cloudName || button.textContent.trim();
+        setActiveButton(button);
+        status.textContent = `Loading ${cloudName} point cloud...`;
+
+        loader.load(
+          button.dataset.cloudSrc,
+          (geometry) => {
+            if (requestId !== activeRequest) {
+              geometry.dispose();
+              return;
+            }
+
+            disposeActivePoints();
+            const pointSize = framePointCloud(geometry);
+            const hasColor = geometry.hasAttribute("color");
+            const material = new THREE.PointsMaterial({
+              size: pointSize,
+              sizeAttenuation: true,
+              vertexColors: hasColor,
+              color: hasColor ? 0xffffff : 0xd8e3d0
+            });
+
+            activePoints = new THREE.Points(geometry, material);
+            scene.add(activePoints);
+            status.textContent = `${cloudName} point cloud`;
+          },
+          (event) => {
+            if (requestId !== activeRequest || !event.total) {
+              return;
+            }
+
+            const progress = Math.round((event.loaded / event.total) * 100);
+            status.textContent = `Loading ${cloudName} point cloud... ${progress}%`;
+          },
+          () => {
+            if (requestId === activeRequest) {
+              status.textContent = `${cloudName} point cloud could not be loaded`;
+            }
+          }
+        );
+      };
+
+      const animate = () => {
+        requestAnimationFrame(animate);
+        controls.update();
+        renderer.render(scene, camera);
+      };
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => loadCloud(button));
+      });
+
+      new ResizeObserver(resize).observe(stage);
+      resize();
+      animate();
+      loadCloud(buttons[0]);
+    }
+  </script>
 </body>
 
 </html>
