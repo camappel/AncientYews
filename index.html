@@ -152,6 +152,11 @@
     .scan-list {
       display: grid;
       gap: 36px;
+      margin-bottom: 52px;
+    }
+
+    .scan-list:last-child {
+      margin-bottom: 0;
     }
 
     .section-heading {
@@ -217,6 +222,7 @@
 
       .scan-list {
         gap: 28px;
+        margin-bottom: 40px;
       }
 
       .site-context {
@@ -248,26 +254,6 @@
         change over time.
       </p>
     </header>
-
-    <section class="site-context" aria-label="Bristlecone pine reveal">
-      <div class="text-block">
-        <p class="eyebrow">Video capture</p>
-        <h2>Bristlecone pine reveal</h2>
-        <p>
-          A short reveal sequence for a bristlecone pine scan experiment. This
-          version uses the cleaner video output rather than the rougher test
-          model, keeping the section focused on the shape and presence of the
-          tree.
-        </p>
-      </div>
-
-      <figure class="video-frame">
-        <video controls muted playsinline loop preload="metadata">
-          <source src="assets/bristlecone_magic_reveal.mp4" type="video/mp4">
-          Your browser does not support this video.
-        </video>
-      </figure>
-    </section>
 
     <section class="site-context" aria-label="Site metadata">
       <div class="text-block">
@@ -314,15 +300,17 @@
       </dl>
     </section>
 
-    <section class="site-context single-column" aria-label="Why ancient trees matter">
+    <section class="site-context single-column" aria-label="Why yews matter">
       <div class="text-block">
-        <h2>Why ancient trees?</h2>
+        <h2>Why yews?</h2>
         <p>
-          Ancient trees often develop hollow trunks, complex branching
-          structures, weathered surfaces, and irregular growth forms that are
-          hard to capture with a single measurement. That is what makes 3D
-          reconstruction interesting: repeat scans could record structure,
-          crown form, hollowing, storm damage, texture, and change over time.
+          Yew is one of Europe's longest-lived native tree species. Ancient
+          yews often develop hollow trunks, complex branching structures, and
+          irregular growth forms that make simple age estimation difficult.
+          That is exactly why 3D reconstruction is interesting: instead of
+          relying only on a single girth measurement, repeat scans could
+          capture structure, crown form, hollowing, storm damage, and change
+          over time.
         </p>
       </div>
     </section>
@@ -342,6 +330,65 @@
           auto-rotate-delay="1000" interaction-prompt="auto" environment-image="neutral" shadow-intensity="0.65"
           exposure="1" loading="lazy"></model-viewer>
       </article>
+    </section>
+
+    <section class="site-context" aria-label="Bristlecone pine metadata">
+      <div class="text-block">
+        <p class="eyebrow">Video capture study</p>
+        <h2>Bristlecone pine reveal</h2>
+        <p>
+          Bristlecone pines are among the longest-lived non-clonal trees known.
+          Their exposed habitats, slow growth, dense deadwood, and twisting
+          forms make them a natural subject for visual documentation.
+        </p>
+        <p>
+          This capture is a short reveal sequence from a bristlecone scan
+          experiment. The video is the clearest output from the session, so it
+          is shown here instead of the rough test model.
+        </p>
+      </div>
+
+      <dl class="metadata-card">
+        <div>
+          <dt>Tree type</dt>
+          <dd>Bristlecone pine</dd>
+        </div>
+        <div>
+          <dt>Capture type</dt>
+          <dd>Video reveal from scan output</dd>
+        </div>
+        <div>
+          <dt>Focus</dt>
+          <dd>Twisting form, exposed wood, surface texture, and silhouette</dd>
+        </div>
+        <div>
+          <dt>Status</dt>
+          <dd>Prototype visual study</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="site-context single-column" aria-label="Why bristlecone pines matter">
+      <div class="text-block">
+        <h2>Why bristlecone pines?</h2>
+        <p>
+          Bristlecone forms can be difficult to read from a single photograph:
+          living strips, weathered deadwood, and sculptural branch patterns all
+          overlap. Repeat visual captures could help compare surface condition,
+          erosion, breakage, and form over time without presenting the scan as
+          a finished scientific record.
+        </p>
+      </div>
+    </section>
+
+    <section class="scan-list" aria-label="Bristlecone pine video">
+      <h2 class="section-heading">Bristlecone reveal video</h2>
+      <figure class="video-frame">
+        <video controls muted playsinline loop preload="metadata">
+          <source src="assets/bristlecone_magic_reveal.mp4" type="video/mp4">
+          Your browser does not support this video.
+        </video>
+      </figure>
     </section>
   </main>
 </body>
